@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sisamob3/util/comunica.dart';
 
 class Principal extends StatelessWidget {
   @override
@@ -92,7 +93,7 @@ class Principal extends StatelessWidget {
                 child: ListTile(
                   leading: Icon(Icons.list),
                   title: Text(
-                    'Atualizar Coordenadas',
+                    'Relatório de Produção',
                     style: TextStyle(fontSize: 12),
                   ),
                   onTap: () {},
@@ -143,7 +144,10 @@ class Principal extends StatelessWidget {
                     'Importar Cadastro',
                     style: TextStyle(fontSize: 12),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Comunica com = Comunica();
+                    com.fetchDados();
+                  },
                 ),
               ),
             ],
