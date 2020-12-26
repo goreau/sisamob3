@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sisamob3/util/routes.dart';
+import 'package:sisamob3/views/com_importa.dart';
 import 'package:sisamob3/views/principal.dart';
 
 void main() {
@@ -15,7 +17,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Principal(),
+      routes: {
+        Routes.HOME: (_) => Principal(),
+        Routes.COM_IMPORTA: (_) => ComImporta(),
+      },
     );
   }
 }

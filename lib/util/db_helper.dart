@@ -4,8 +4,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DbHelper {
-  static final _databaseName = "sisamob3.db";
-  static final _databaseVersion = 1;
+  static final _databaseName = "sisamob1.db";
+  static final _databaseVersion = 2;
 
   // Uso
 
@@ -15,7 +15,7 @@ class DbHelper {
     "CREATE TABLE municipio(id_municipio INTEGER, nome TEXT, codigo TEXT)",
     "CREATE TABLE area(id_area INTEGER, id_municipio INTEGER, codigo TEXT)",
     "CREATE TABLE censitario(id_censitario INTEGER, id_area INTEGER, codigo TEXT)",
-    "CREATE TABLE quarteirao(id_quarteirao INTEGER, id_censitario INTEGER, numero_quarteirao TEXT, sub_numero TEXT)",
+    "CREATE TABLE quarteirao(id_quarteirao INTEGER, id_censitario INTEGER, numero TEXT, sub_numero TEXT)",
     "CREATE TABLE imovel(id_imovel INTEGER, id_municipio INTEGER, id_quarteirao INTEGER, numero_imovel TEXT, endereco TEXT, id_atividade INTEGER)",
     "CREATE TABLE grupo_rec(id_grupo_rec INTEGER, codigo TEXT, nome TEXT)",
     "CREATE TABLE tipo_rec(id_tipo_rec INTEGER, id_grupo_rec INTEGER, nome TEXT)",
@@ -39,7 +39,10 @@ class DbHelper {
   static Database _database;
 
   Future<Database> get database async {
-    if (_database != null) return _database;
+    if (_database != null) {
+      print('banco retornado');
+      return _database;
+    }
     // instancia o db na primeira vez que for acessado
     _database = await _initDatabase();
     return _database;
@@ -49,14 +52,40 @@ class DbHelper {
   _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, _databaseName);
-    return await openDatabase(path,
-        version: _databaseVersion, onCreate: _onCreate);
+    return await openDatabase(
+      path,
+      version: _databaseVersion,
+      onUpgrade: _onUpgrade,
+      onCreate: _onCreate,
+    );
+  }
+
+  Future _onUpgrade(Database db, int version, int newVersion) async {
+    tabelas.forEach((e) {
+      db.execute("DROP TABLE IF EXISTS $e");
+      print('dropando $e');
+    });
+    _onCreate(db, newVersion);
   }
 
   // Código SQL para criar o banco de dados e as tabelas
   Future _onCreate(Database db, int version) async {
-    persiste(db);
-    sqlCreate.map((e) => db.execute(e));
+    // persiste(db);
+    print('chegou no criar');
+    Batch batch = db.batch();
+    try {
+      //print(sqlCreate);
+      sqlCreate.forEach((e) {
+        print(e);
+        batch.execute(e);
+        //await db.execute(e);
+      });
+      List<dynamic> res = await batch.commit();
+      res.map((e) => print(e));
+      print('banco criado do zero $res');
+    } catch (e) {
+      print('Erro criando tabela $e');
+    }
   }
 
   persiste(Database db) {
@@ -87,6 +116,11 @@ class DbHelper {
     Database db = await instance.database;
     return Sqflite.firstIntValue(
         await db.rawQuery('SELECT COUNT(*) FROM $table'));
+  }
+
+  Future<List<Map<String, dynamic>>> queryGen(String sql) async {
+    Database db = await instance.database;
+    return await db.rawQuery(sql);
   }
 
   // Assumimos aqui que a coluna id no mapa está definida. Os outros

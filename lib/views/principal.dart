@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sisamob3/util/comunica.dart';
+import 'package:sisamob3/util/routes.dart';
 
 class Principal extends StatelessWidget {
   @override
@@ -145,8 +146,9 @@ class Principal extends StatelessWidget {
                     style: TextStyle(fontSize: 12),
                   ),
                   onTap: () {
-                    Comunica com = Comunica();
-                    com.fetchDados();
+                    Navigator.of(context).pushNamed(
+                      Routes.COM_IMPORTA
+                    );
                   },
                 ),
               ),

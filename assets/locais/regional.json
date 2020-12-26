@@ -1,0 +1,41 @@
+﻿{"locais":[{
+	"codigo": 1,
+	"nome": "DPE"
+	},
+	{
+	"codigo": 2,
+	"nome": "São Vicente"
+	},
+	{
+	"codigo": 3,
+	"nome": "Taubaté"
+	},
+	{
+	"codigo": 4,
+	"nome": "Sorocaba"
+	},
+	{
+	"codigo": 5,
+	"nome": "Campinas"
+	},
+	{
+	"codigo": 6,
+	"nome": "Ribeirão Preto"
+	},
+	{
+	"codigo": 8,
+	"nome": "São José do Rio Preto"
+	},
+	{
+	"codigo": 9,
+	"nome": "Araçatuba"
+	},
+	{
+	"codigo": 10,
+	"nome": "Presidente Prudente"
+	},
+	{
+	"codigo": 11,
+	"nome": "Marília"
+	}]
+}
