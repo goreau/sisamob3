@@ -60,6 +60,7 @@ class Comunica {
             row['codigo'] = campo['codigo'].toString().trim();
             await dbHelper.insert(row, linha);
             ct++;
+            //print('$ct areas');
           }
           resumo += ct > 0 ? 'Área: $ct registros\n' : '';
         } else if (linha == 'censitario') {
@@ -111,17 +112,18 @@ class Comunica {
             row['grupo'] = campo['grupo'];
             await dbHelper.insert(row, linha);
             ct++;
+            //print('$ct atividades');
           }
           resumo += ct > 0 ? 'Atividade: $ct registros\n' : '';
         }
       }
-      final scaffold = ScaffoldMessenger.of(context);
+      /* final scaffold = ScaffoldMessenger.of(context);
       scaffold.showSnackBar(
         SnackBar(
           content: const Text('Cadastro recebido.'),
           backgroundColor: Colors.green[900],
         ),
-      );
+      );*/
     } else {
       throw Exception('Falha ao carregar cadastro');
     }
