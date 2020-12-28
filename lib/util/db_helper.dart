@@ -5,7 +5,9 @@ import 'package:sqflite/sqflite.dart';
 
 class DbHelper {
   static final _databaseName = "sisamob1.db";
-  static final _databaseVersion = 2;
+  static final _databaseVersion = 9;
+
+  Map registros = Map<String, dynamic>();
 
   // Uso
 
@@ -40,7 +42,6 @@ class DbHelper {
 
   Future<Database> get database async {
     if (_database != null) {
-      print('banco retornado');
       return _database;
     }
     // instancia o db na primeira vez que for acessado
@@ -61,42 +62,28 @@ class DbHelper {
   }
 
   Future _onUpgrade(Database db, int version, int newVersion) async {
-    tabelas.forEach((e) {
+    await _persiste(db);
+    /* tabelas.forEach((e) {
       db.execute("DROP TABLE IF EXISTS $e");
-      print('dropando $e');
-    });
+    });*/
     _onCreate(db, newVersion);
+    _recupera(db);
   }
 
   // Código SQL para criar o banco de dados e as tabelas
   Future _onCreate(Database db, int version) async {
-    // persiste(db);
-    print('chegou no criar');
+    //
     Batch batch = db.batch();
     try {
-      //print(sqlCreate);
       sqlCreate.forEach((e) {
-        print(e);
         batch.execute(e);
-        //await db.execute(e);
       });
       List<dynamic> res = await batch.commit();
-      res.map((e) => print(e));
-      print('banco criado do zero $res');
     } catch (e) {
       print('Erro criando tabela $e');
     }
   }
 
-  persiste(Database db) {
-    tabelas.map((e) => db.execute("DROP TABLE IF EXISTS $e"));
-  }
-
-  // métodos Helper
-  //----------------------------------------------------
-  // Insere uma linha no banco de dados onde cada chave
-  // no Map é um nome de coluna e o valor é o valor da coluna.
-  // O valor de retorno é o id da linha inserida.
   Future<int> insert(Map<String, dynamic> row, String table) async {
     Database db = await instance.database;
     return await db.insert(table, row);
@@ -109,33 +96,41 @@ class DbHelper {
     return await db.query(table);
   }
 
-  // Todos os métodos : inserir, consultar, atualizar e excluir,
-  // também podem ser feitos usando  comandos SQL brutos.
-  // Esse método usa uma consulta bruta para fornecer a contagem de linhas.
   Future<int> queryRowCount(String table) async {
     Database db = await instance.database;
     return Sqflite.firstIntValue(
         await db.rawQuery('SELECT COUNT(*) FROM $table'));
   }
 
-  Future<List<Map<String, dynamic>>> queryGen(String sql) async {
-    Database db = await instance.database;
-    return await db.rawQuery(sql);
-  }
-
-  // Assumimos aqui que a coluna id no mapa está definida. Os outros
-  // valores das colunas serão usados para atualizar a linha.
   Future<int> update(Map<String, dynamic> row, String table, int id) async {
     Database db = await instance.database;
     String idField = 'id_$table';
     return await db.update(table, row, where: '$idField = ?', whereArgs: [id]);
   }
 
-  // Exclui a linha especificada pelo id. O número de linhas afetadas é
-  // retornada. Isso deve ser igual a 1, contanto que a linha exista.
   Future<int> delete(int id, String table) async {
     Database db = await instance.database;
     String idField = 'id_$table';
     return await db.delete(table, where: '$idField = ?', whereArgs: [id]);
+  }
+
+  _persiste(Database db) async {
+    //fornecer valor padrão para o campo alterado
+    final persTabela = ["municipio", "area", "censitario", "quarteirao"];
+    persTabela.forEach((element) async {
+      List<Map> result = await db.query(element);
+      var lista = [];
+      result.forEach((row) {
+        lista.add(row);
+      });
+      registros[element] = lista;
+      db.execute("DROP TABLE IF EXISTS $element");
+    });
+  }
+
+  _recupera(Database db) async {
+    registros.forEach((key, value) {
+      db.insert(key, value);
+    });
   }
 }

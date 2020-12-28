@@ -21,6 +21,13 @@ class MyApp extends StatelessWidget {
         Routes.HOME: (_) => Principal(),
         Routes.COM_IMPORTA: (_) => ComImporta(),
       },
+      builder: (BuildContext context, Widget widget) {
+        Widget error = Text('Encontramos um erro....');
+        if (widget is Scaffold || widget is Navigator)
+          error = Scaffold(body: Center(child: error));
+        ErrorWidget.builder = (FlutterErrorDetails errorDetails) => error;
+        return widget;
+      },
     );
   }
 }

@@ -57,6 +57,13 @@ class _ComImportaState extends State<ComImporta> {
     });
   }
 
+  String _resumo = '';
+  void _handleRetornoRecebe(String value) {
+    setState(() {
+      _resumo = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -191,6 +198,7 @@ class _ComImportaState extends State<ComImporta> {
                         hintText: 'Local a importar'),
                     textSubmitted: (text) => {_setLocal(text)},
                   ),
+                  SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
                     height: 60,
@@ -198,14 +206,23 @@ class _ComImportaState extends State<ComImporta> {
                         onPressed: () {
                           _form.currentState.save();
                           Comunica com = Comunica();
-                          com.fetchDados(_radioInfo, _radioNivel, _local);
-                          print(_radioInfo);
-                          print(_radioNivel);
-                          print(_local);
+                          com
+                              .fetchDados(
+                                  _radioInfo, _radioNivel, _local, context)
+                              .then(
+                                (String value) => _handleRetornoRecebe(value),
+                              );
                         },
                         child: Text('Carregar'),
                         style: ElevatedButton.styleFrom(primary: Colors.blue)),
-                  )
+                  ),
+                  Text(
+                    _resumo,
+                    style: new TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 14.0,
+                    ),
+                  ),
                 ],
               ),
             ),

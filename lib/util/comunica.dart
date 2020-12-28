@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'db_helper.dart';
 
@@ -16,8 +17,11 @@ class Comunica {
     "atividade"
   ];
 
-  Future fetchDados(int tipo, int nivel, String local) async {
+  Future<String> fetchDados(
+      int tipo, int nivel, String local, BuildContext context) async {
     String _url = '';
+    String resumo = 'Registros recebidos:\n';
+
     if (tipo == 1) {
       _url =
           'http://200.144.1.24/dados/Cadastros.php?tipo=sistema&nivel=1&id=1';
@@ -37,78 +41,90 @@ class Comunica {
           continue;
         }
         Map<String, dynamic> row = new Map();
+        int ct = 0;
         if (linha == 'municipio') {
+          ct = 0;
           for (var campo in obj) {
             row['id_municipio'] = campo['id_municipio'];
             row['nome'] = campo['nome'];
             row['codigo'] = campo['codigo'];
-            //  print(row);
-            int id = await dbHelper.insert(row, linha);
-            print('Id mun inserido $id');
+            await dbHelper.insert(row, linha);
+            ct++;
           }
+          resumo += ct > 0 ? 'Município: $ct registros\n' : '';
         } else if (linha == 'area') {
+          ct = 0;
           for (var campo in obj) {
             row['id_area'] = campo['id_area'];
             row['id_municipio'] = campo['id_municipio'];
             row['codigo'] = campo['codigo'].toString().trim();
-            //print(row);
-            int id = await dbHelper.insert(row, linha);
-            print('Id area inserido $id');
+            await dbHelper.insert(row, linha);
+            ct++;
           }
+          resumo += ct > 0 ? 'Área: $ct registros\n' : '';
         } else if (linha == 'censitario') {
+          ct = 0;
           for (var campo in obj) {
             row['id_censitario'] = campo['id_censitario'];
             row['id_area'] = campo['id_area'];
             row['codigo'] = campo['codigo'].toString().trim();
-            // print(row);
-            int id = await dbHelper.insert(row, linha);
-            print('Id cens inserido $id');
+            await dbHelper.insert(row, linha);
+            ct++;
           }
+          resumo += ct > 0 ? 'Censitário: $ct registros\n' : '';
         } else if (linha == 'quarteirao') {
+          ct = 0;
           for (var campo in obj) {
             row['id_quarteirao'] = campo['id_quarteirao'];
             row['id_censitario'] = campo['id_censitario'];
             row['numero'] = campo['numero'].toString().trim();
             row['sub_numero'] = campo['sub_numero'].toString().trim();
-            // print(row);
-            int id = await dbHelper.insert(row, linha);
-            print('Id quart inserido $id');
+            await dbHelper.insert(row, linha);
+            ct++;
           }
+          resumo += ct > 0 ? 'Quarteirão: $ct registros\n' : '';
         } else if (linha == 'grupo_rec') {
+          ct = 0;
           for (var campo in obj) {
             row['id_grupo_rec'] = campo['id_grupo_rec'];
             row['codigo'] = campo['codigo'];
             row['nome'] = campo['nome'].toString().trim();
-            final tables = await dbHelper
-                .queryGen('SELECT * FROM sqlite_master ORDER BY name;');
-            print(tables);
-            int id = await dbHelper.insert(row, linha);
-            print('Id grupo inserido $id');
+            await dbHelper.insert(row, linha);
+            ct++;
           }
+          resumo += ct > 0 ? 'Grupo Recipientes: $ct registros\n' : '';
         } else if (linha == 'tipo_rec') {
+          ct = 0;
           for (var campo in obj) {
             row['id_tipo_rec'] = campo['id_tipo_rec'];
             row['id_grupo_rec'] = campo['id_grupo_rec'];
             row['nome'] = campo['nome'].toString().trim();
-            //print(row);
-            int id = await dbHelper.insert(row, linha);
-            print('Id tipo inserido $id');
+            await dbHelper.insert(row, linha);
+            ct++;
           }
+          resumo += ct > 0 ? 'Tipo de Recipiente: $ct registros\n' : '';
         } else if (linha == 'atividade') {
+          ct = 0;
           for (var campo in obj) {
             row['id_atividade'] = campo['id_atividade'];
             row['nome'] = campo['nome'].toString().trim();
             row['grupo'] = campo['grupo'];
-            //print(row);
-            int id = await dbHelper.insert(row, linha);
-            print('Id ativ inserido $id');
+            await dbHelper.insert(row, linha);
+            ct++;
           }
+          resumo += ct > 0 ? 'Atividade: $ct registros\n' : '';
         }
       }
+      final scaffold = ScaffoldMessenger.of(context);
+      scaffold.showSnackBar(
+        SnackBar(
+          content: const Text('Cadastro recebido.'),
+          backgroundColor: Colors.green[900],
+        ),
+      );
     } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load album');
+      throw Exception('Falha ao carregar cadastro');
     }
+    return resumo;
   }
 }
