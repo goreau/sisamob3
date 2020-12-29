@@ -115,6 +115,11 @@ class DbHelper {
     return await db.delete(table, where: '$idField = ?', whereArgs: [id]);
   }
 
+  Future<void> limpa(String table) async {
+    Database db = await instance.database;
+    return await db.delete(table);
+  }
+
   Future<void> _persiste(Database db) async {
     //fornecer valor padrão para o campo alterado
     final persTabela = ["municipio", "area", "censitario", "quarteirao"];
@@ -139,5 +144,11 @@ class DbHelper {
         db.insert(element, reg);
       }
     }
+  }
+
+  Future<List<Map>> qryCombo(String tabela) async {
+    Database db = await instance.database;
+    return await db
+        .rawQuery('SELECT id_$tabela as id, nome FROM $tabela order by id');
   }
 }

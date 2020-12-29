@@ -40,6 +40,7 @@ class Comunica {
         if (obj == null) {
           continue;
         }
+        await dbHelper.limpa(linha);
         Map<String, dynamic> row = new Map();
         int ct = 0;
         if (linha == 'municipio') {
@@ -117,13 +118,13 @@ class Comunica {
           resumo += ct > 0 ? 'Atividade: $ct registros\n' : '';
         }
       }
-      /* final scaffold = ScaffoldMessenger.of(context);
+      final scaffold = ScaffoldMessenger.of(context);
       scaffold.showSnackBar(
         SnackBar(
           content: const Text('Cadastro recebido.'),
           backgroundColor: Colors.green[900],
         ),
-      );*/
+      );
     } else {
       throw Exception('Falha ao carregar cadastro');
     }
