@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sisamob3/util/comunica.dart';
 import 'package:sisamob3/util/routes.dart';
 
 class Principal extends StatelessWidget {
@@ -64,7 +63,9 @@ class Principal extends StatelessWidget {
                     'Registrar',
                     style: TextStyle(fontSize: 12),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pushNamed(Routes.VISITA);
+                  },
                 ),
               ),
               Container(
@@ -146,9 +147,7 @@ class Principal extends StatelessWidget {
                     style: TextStyle(fontSize: 12),
                   ),
                   onTap: () {
-                    Navigator.of(context).pushNamed(
-                      Routes.COM_IMPORTA
-                    );
+                    Navigator.of(context).pushNamed(Routes.COM_IMPORTA);
                   },
                 ),
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sisamob3/util/routes.dart';
+import 'package:sisamob3/views/atividade.dart';
 import 'package:sisamob3/views/com_importa.dart';
 import 'package:sisamob3/views/principal.dart';
 
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       routes: {
         Routes.HOME: (_) => Principal(),
         Routes.COM_IMPORTA: (_) => ComImporta(),
+        Routes.VISITA: (_) => Atividade(),
       },
       builder: (BuildContext context, Widget widget) {
         Widget error = Text('Encontramos um erro....');
