@@ -1,11 +1,12 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DbHelper {
   static final _databaseName = "sisamob1.db";
-  static final _databaseVersion = 9;
+  static final _databaseVersion = 8;
 
   Map registros = Map<String, dynamic>();
 
@@ -63,10 +64,10 @@ class DbHelper {
 
   Future _onUpgrade(Database db, int version, int newVersion) async {
     await _persiste(db);
-    /* tabelas.forEach((e) {
-      db.execute("DROP TABLE IF EXISTS $e");
-    });*/
-    _onCreate(db, newVersion);
+    for (var e in tabelas) {
+      await db.execute("DROP TABLE IF EXISTS $e");
+    }
+    await _onCreate(db, newVersion);
     _recupera(db);
   }
 
@@ -80,7 +81,7 @@ class DbHelper {
       });
       List<dynamic> res = await batch.commit();
     } catch (e) {
-      print('Erro criando tabela $e');
+      debugPrint('Erro criando tabela $e');
     }
   }
 
@@ -114,23 +115,29 @@ class DbHelper {
     return await db.delete(table, where: '$idField = ?', whereArgs: [id]);
   }
 
-  _persiste(Database db) async {
+  Future<void> _persiste(Database db) async {
     //fornecer valor padrão para o campo alterado
     final persTabela = ["municipio", "area", "censitario", "quarteirao"];
-    persTabela.forEach((element) async {
-      List<Map> result = await db.query(element);
+    for (var element in persTabela) {
       var lista = [];
-      result.forEach((row) {
-        lista.add(row);
+      await db.query(element).then((value) {
+        for (var row in value) {
+          //value.forEach((row) {
+          lista.add(row);
+        } //);
+        registros[element] = lista;
       });
-      registros[element] = lista;
-      db.execute("DROP TABLE IF EXISTS $element");
-    });
+    }
   }
 
   _recupera(Database db) async {
-    registros.forEach((key, value) {
-      db.insert(key, value);
-    });
+    print(registros);
+    final persTabela = ["municipio", "area", "censitario", "quarteirao"];
+    for (var element in persTabela) {
+      var tab = registros[element];
+      for (var reg in tab) {
+        db.insert(element, reg);
+      }
+    }
   }
 }
