@@ -148,7 +148,15 @@ class DbHelper {
 
   Future<List<Map>> qryCombo(String tabela) async {
     Database db = await instance.database;
-    return await db
-        .rawQuery('SELECT id_$tabela as id, nome FROM $tabela order by id');
+    String sql;
+    if (tabela == 'quarteirao') {
+      sql = 'SELECT id_$tabela as id, numero as nome FROM $tabela order by id';
+    } else if (tabela == 'area' || tabela == 'censitario') {
+      sql = 'SELECT id_$tabela as id, codigo as nome FROM $tabela order by id';
+    } else {
+      sql = 'SELECT id_$tabela as id, nome FROM $tabela order by id';
+    }
+
+    return await db.rawQuery(sql);
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sisamob3/util/db_helper.dart';
+import 'package:sisamob3/util/storage.dart';
 
 class ComboBox extends StatefulWidget {
   final tab;
@@ -22,23 +23,33 @@ class _ComboBoxState extends State<ComboBox> {
   _setvalue(String value) {
     setState(() {
       _value = value;
+      Storage.insere(widget.tab, _value);
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _value = widget.val != '' ? widget.val : '1';
+    _value = widget.val.toString();
     _screenStage = "loading";
     _onceSetupDropDown();
   }
 
   _onceSetupDropDown() {
     list = [];
+
+    list.add(DropdownMenuItem<String>(
+      child: Text(
+        '--Selecione--',
+        style: new TextStyle(
+          fontSize: 12.0,
+        ),
+      ),
+      value: '0',
+    ));
     final dbHelper = DbHelper.instance;
     dbHelper.qryCombo(widget.tab).then((listMap) {
       listMap.map((map) {
-        print(map.toString());
         return getDropDownWidget(map);
       }).forEach((element) {
         list.add(element);
@@ -58,7 +69,7 @@ class _ComboBoxState extends State<ComboBox> {
                 hint: Text(
                   '-- Selecione --',
                   style: new TextStyle(
-                    fontSize: 11.0,
+                    fontSize: 12.0,
                   ),
                 ),
                 items: list,
@@ -77,7 +88,7 @@ class _ComboBoxState extends State<ComboBox> {
       child: Text(
         map['nome'],
         style: new TextStyle(
-          fontSize: 11.0,
+          fontSize: 12.0,
         ),
       ),
       value: map['id'].toString(),

@@ -3,17 +3,17 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Storage {
-  recupera(String key) async {
+  static dynamic recupera(String key) async {
     final prefs = await SharedPreferences.getInstance();
     return json.decode(prefs.getString(key));
   }
 
-  insere(String key, value) async {
+  static insere(String key, value) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(key, json.encode(value));
   }
 
-  remove(String key) async {
+  static remove(String key) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove(key);
   }
