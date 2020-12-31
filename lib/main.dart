@@ -3,6 +3,7 @@ import 'package:sisamob3/util/routes.dart';
 import 'package:sisamob3/views/atividade.dart';
 import 'package:sisamob3/views/com_importa.dart';
 import 'package:sisamob3/views/principal.dart';
+import 'package:sisamob3/views/vis_imovel.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         Routes.HOME: (_) => Principal(),
         Routes.COM_IMPORTA: (_) => ComImporta(),
         Routes.VISITA: (_) => Atividade(),
+        Routes.VIS_IMOVEL: (_) => VisImovel(),
       },
       builder: (BuildContext context, Widget widget) {
         Widget error = Text('Encontramos um erro....');

@@ -13,26 +13,45 @@ class _AtividadeState extends State<Atividade> {
   final _form = GlobalKey<FormState>();
 
   Visita vis;
-  // String _data = new DateTime.now().toString().substring(0, 10);
 
   final dateController = TextEditingController();
   int ano = DateTime.parse(new DateTime.now().toString()).year;
 
   final _agenteController = TextEditingController();
 
-// data escolhida no picker
-  void getCurrentDate(String date) async {
+  Future<void> getCurrentDate(String date) async {
     var dateParse = DateTime.parse(date);
 
     var formattedDate = "${dateParse.day}-${dateParse.month}-${dateParse.year}";
+
     setState(() {
-      vis.dt_cadastro = formattedDate.toString();
+      _data = formattedDate.toString();
     });
+  }
+
+  // valores iniciais //
+  int _radioExec = -1;
+  int _spinAtiv = 0;
+  int _spinMun = 0;
+  String _agente = '';
+  String _data = new DateTime.now().toString().substring(0, 10);
+
+  //=================//
+
+  void _loadFormdata(Visita vis) async {
+    if (vis != null) {
+      _radioExec = vis.id_execucao;
+      _spinAtiv = vis.id_atividade;
+      _spinMun = vis.id_municipio;
+      _agente = vis.agente;
+      _data = vis.dt_cadastro;
+    } else {}
+    dateController.text = _data;
   }
 
   void _handleRadioExecChange(int value) {
     setState(() {
-      vis.id_execucao = value;
+      _radioExec = value;
     });
   }
 
@@ -40,14 +59,15 @@ class _AtividadeState extends State<Atividade> {
     try {
       var atv = await Storage.recupera('atividade');
       var mnc = await Storage.recupera('municipio');
-      vis.id_atividade = int.parse(atv);
-      vis.id_municipio = int.parse(mnc);
+      print(atv);
+      _spinAtiv = int.parse(atv);
+      _spinMun = int.parse(mnc);
     } catch (e) {}
   }
 
   void _doRegister() async {
     await _loadChoices();
-    if (vis.id_execucao < 1 || vis.id_atividade == 0 || vis.id_municipio == 0) {
+    if (_radioExec < 1 || _spinAtiv == 0 || _spinMun == 0) {
       final scaffold = ScaffoldMessenger.of(context);
       scaffold.showSnackBar(SnackBar(
         content: const Text('Todos os campos são obrigatórios.'),
@@ -57,10 +77,18 @@ class _AtividadeState extends State<Atividade> {
     }
     if (_form.currentState.validate()) {
       _form.currentState.save();
-      Storage.insere('agente', vis.agente);
-      Storage.insere('exec', vis.id_execucao);
+      Storage.insere('agente', _agente);
+      Storage.insere('exec', _radioExec);
+      print('salvou a porra');
 
-      if ([5, 6.7].contains(vis.id_atividade)) {
+      /*  Visita saved = Visita(
+          id_execucao: _radioExec,
+          id_municipio: _spinMun,
+          id_atividade: _spinAtiv,
+          dt_cadastro: _data,
+          agente: _agente);*/
+
+      if ([5].contains(_spinAtiv)) {
         Navigator.of(context).pushNamed(
           Routes.VIS_IMOVEL,
           arguments: vis, //saved,
@@ -76,10 +104,9 @@ class _AtividadeState extends State<Atividade> {
       ag = await Storage.recupera('agente');
       ex = await Storage.recupera('exec');
       setState(() {
-        vis.agente = ag;
-        vis.id_execucao = ex;
+        _agente = ag;
+        _radioExec = ex;
         _agenteController.text = ag;
-        vis.dt_cadastro = DateTime.now().toString().substring(0, 10);
       });
     } catch (e) {}
   }
@@ -102,24 +129,6 @@ class _AtividadeState extends State<Atividade> {
     super.didChangeDependencies();
     vis = ModalRoute.of(context).settings.arguments;
     //_loadFormdata(vis);
-    if (vis == null) {
-      vis = Visita(
-        id_visita: 0,
-        id_execucao: 0,
-        id_municipio: 0,
-        id_atividade: 0,
-        dt_cadastro: '',
-        agente: '',
-        id_area: 0,
-        id_censitario: 0,
-        id_quarteirao: 0,
-        tipo_trab: 0,
-        id_focal: 0,
-        id_peri: 0,
-        id_nebul: 0,
-      );
-      _loadPreferences();
-    }
   }
 
   @override
@@ -137,7 +146,7 @@ class _AtividadeState extends State<Atividade> {
                 title: Text(
                   'Execução:',
                   style: new TextStyle(
-                    fontSize: 13,
+                    fontSize: 12,
                   ),
                   textAlign: TextAlign.start,
                 ),
@@ -145,25 +154,25 @@ class _AtividadeState extends State<Atividade> {
                   new Row(children: <Widget>[
                     new Radio(
                       value: 1,
-                      groupValue: vis.id_execucao,
+                      groupValue: _radioExec,
                       onChanged: _handleRadioExecChange,
                     ),
                     new Text(
                       'Sucen',
-                      style: new TextStyle(fontSize: 12.0),
+                      style: new TextStyle(fontSize: 11.0),
                     ),
                   ]),
                   Row(
                     children: [
                       new Radio(
                         value: 2,
-                        groupValue: vis.id_execucao,
+                        groupValue: _radioExec,
                         onChanged: _handleRadioExecChange,
                       ),
                       new Text(
                         'Controle de Vetores',
                         style: new TextStyle(
-                          fontSize: 12.0,
+                          fontSize: 11.0,
                         ),
                       ),
                     ],
@@ -172,13 +181,13 @@ class _AtividadeState extends State<Atividade> {
                     children: [
                       new Radio(
                         value: 3,
-                        groupValue: vis.id_execucao,
+                        groupValue: _radioExec,
                         onChanged: _handleRadioExecChange,
                       ),
                       new Text(
                         'Agente Comunitário',
                         style: new TextStyle(
-                          fontSize: 12.0,
+                          fontSize: 11.0,
                         ),
                       ),
                     ],
@@ -188,9 +197,6 @@ class _AtividadeState extends State<Atividade> {
               ListTile(
                 leading: const Icon(Icons.accessibility),
                 title: TextFormField(
-                  style: new TextStyle(
-                    fontSize: 12,
-                  ),
                   controller: _agenteController,
                   decoration: InputDecoration(labelText: 'Agente'),
                   validator: (value) {
@@ -200,7 +206,7 @@ class _AtividadeState extends State<Atividade> {
                       return null;
                     }
                   },
-                  onSaved: (value) => vis.agente = value,
+                  onSaved: (value) => _agente = value,
                 ),
               ),
               ListTile(
@@ -208,29 +214,26 @@ class _AtividadeState extends State<Atividade> {
                 title: Text(
                   'Município:',
                   style: new TextStyle(
-                    fontSize: 13,
+                    fontSize: 12,
                   ),
                   textAlign: TextAlign.start,
                 ),
-                subtitle: ComboBox('municipio', vis.id_municipio),
+                subtitle: ComboBox('municipio', _spinMun),
               ),
               ListTile(
                 leading: const Icon(Icons.construction),
                 title: Text(
                   'Atividade:',
                   style: new TextStyle(
-                    fontSize: 13,
+                    fontSize: 12,
                   ),
                   textAlign: TextAlign.start,
                 ),
-                subtitle: ComboBox('atividade', vis.id_atividade),
+                subtitle: ComboBox('atividade', _spinAtiv),
               ),
               ListTile(
                 leading: const Icon(Icons.calendar_today),
                 title: TextFormField(
-                  style: new TextStyle(
-                    fontSize: 12,
-                  ),
                   readOnly: true,
                   controller: dateController,
                   decoration: InputDecoration(hintText: 'Data da Atividade'),
@@ -241,16 +244,17 @@ class _AtividadeState extends State<Atividade> {
                       return null;
                     }
                   },
-                  onSaved: (value) => vis.dt_cadastro = value,
+                  onSaved: (value) => _data = value,
                   onTap: () async {
                     var date = await showDatePicker(
                       context: context,
-                      initialDate: DateTime.parse(vis.dt_cadastro),
+                      initialDate:
+                          DateTime.parse(_data.split('-').reversed.join('-')),
                       firstDate: DateTime(ano - 2),
                       lastDate: DateTime(ano + 1),
                     );
                     await getCurrentDate(date.toString().substring(0, 10));
-                    dateController.text = vis.dt_cadastro;
+                    dateController.text = _data;
                     //date.toString().substring(0, 10);
                   },
                 ),

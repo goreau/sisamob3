@@ -115,6 +115,11 @@ class DbHelper {
     return await db.delete(table, where: '$idField = ?', whereArgs: [id]);
   }
 
+  Future<void> limpa(String table) async {
+    Database db = await instance.database;
+    return await db.delete(table);
+  }
+
   Future<void> _persiste(Database db) async {
     //fornecer valor padrão para o campo alterado
     final persTabela = ["municipio", "area", "censitario", "quarteirao"];
@@ -141,18 +146,17 @@ class DbHelper {
     }
   }
 
-  Future<Map<String, dynamic>> combo(String tabela) async {
+  Future<List<Map>> qryCombo(String tabela) async {
     Database db = await instance.database;
-    var map = Map<String, dynamic>();
-    await db
-        .rawQuery('SELECT id_$tabela as id, nome FROM $tabela')
-        .then((value) {
-      for (var row in value) {
-        map['id_municipio'] = row['id'];
-        map['nome'] = row['nome'];
-      } //);
-    });
+    String sql;
+    if (tabela == 'quarteirao') {
+      sql = 'SELECT id_$tabela as id, numero as nome FROM $tabela order by id';
+    } else if (tabela == 'area' || tabela == 'censitario') {
+      sql = 'SELECT id_$tabela as id, codigo as nome FROM $tabela order by id';
+    } else {
+      sql = 'SELECT id_$tabela as id, nome FROM $tabela order by id';
+    }
 
-    return map;
+    return await db.rawQuery(sql);
   }
 }
