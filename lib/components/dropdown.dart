@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../util/db_helper.dart';
 /*
 class DropDown extends StatefulWidget {
   @override
@@ -74,14 +76,23 @@ class Dropdown extends StatefulWidget {
 
 class _DropdownState extends State<Dropdown> {
   String _value;
-  var _itens = {
+  final dbHelper = DbHelper.instance;
+  //Map<String, dynamic> _itens = await dbHelper.combo('municipio');
+  final _itens = {
     '12': 'Santos',
     '18': 'Porto Alegre',
     '123': 'Campinas',
     '456': 'Rio de Janeiro'
   };
+  /* _DropdownState() {
+    _itens = dbHelper.combo('municipio');
+  }*/
 
   List<DropdownMenuItem<String>> menuItems = List();
+  //Map<String, dynamic> _itens;
+  //Future<void> popula() async {
+
+  //}
 
   @override
   Widget build(BuildContext context) {

@@ -140,4 +140,19 @@ class DbHelper {
       }
     }
   }
+
+  Future<Map<String, dynamic>> combo(String tabela) async {
+    Database db = await instance.database;
+    var map = Map<String, dynamic>();
+    await db
+        .rawQuery('SELECT id_$tabela as id, nome FROM $tabela')
+        .then((value) {
+      for (var row in value) {
+        map['id_municipio'] = row['id'];
+        map['nome'] = row['nome'];
+      } //);
+    });
+
+    return map;
+  }
 }
