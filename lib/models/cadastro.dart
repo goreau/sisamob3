@@ -37,6 +37,7 @@ class Quarteirao {
   final int id_censitario;
   final String numero;
   final String sub_numero;
+
   const Quarteirao({
     this.id_quarteirao,
     this.id_censitario,
@@ -96,5 +97,19 @@ class Atividade {
     this.id_atividade,
     this.nome,
     this.grupo,
+  });
+}
+
+class Produto {
+  final int id_produto;
+  final String codigo;
+  final String nome;
+  final int tipo_uso;
+
+  const Produto({
+    this.id_produto,
+    this.codigo,
+    this.nome,
+    this.tipo_uso,
   });
 }

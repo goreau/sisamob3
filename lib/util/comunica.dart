@@ -14,7 +14,8 @@ class Comunica {
     "imovel",
     "grupo_rec",
     "tipo_rec",
-    "atividade"
+    "atividade",
+    "produto"
   ];
 
   Future<String> fetchDados(
@@ -79,7 +80,7 @@ class Comunica {
           for (var campo in obj) {
             row['id_quarteirao'] = campo['id_quarteirao'];
             row['id_censitario'] = campo['id_censitario'];
-            row['numero'] = campo['numero'].toString().trim();
+            row['numero'] = campo['numero_quarteirao'].toString().trim();
             row['sub_numero'] = campo['sub_numero'].toString().trim();
             await dbHelper.insert(row, linha);
             ct++;
@@ -116,6 +117,18 @@ class Comunica {
             //print('$ct atividades');
           }
           resumo += ct > 0 ? 'Atividade: $ct registros\n' : '';
+        } else if (linha == 'produto') {
+          ct = 0;
+          for (var campo in obj) {
+            row['id_produto'] = campo['id_produto'];
+            row['codigo'] = campo['codigo'].toString().trim();
+            row['nome'] = campo['nome'].toString().trim();
+            row['tipo_uso'] = campo['tipo_uso'];
+            await dbHelper.insert(row, linha);
+            ct++;
+            //print('$ct atividades');
+          }
+          resumo += ct > 0 ? 'Produto: $ct registros\n' : '';
         }
       }
       final scaffold = ScaffoldMessenger.of(context);

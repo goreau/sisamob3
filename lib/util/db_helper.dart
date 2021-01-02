@@ -6,7 +6,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DbHelper {
   static final _databaseName = "sisamob1.db";
-  static final _databaseVersion = 8;
+  static final _databaseVersion = 9;
 
   Map registros = Map<String, dynamic>();
 
@@ -22,7 +22,8 @@ class DbHelper {
     "CREATE TABLE imovel(id_imovel INTEGER, id_municipio INTEGER, id_quarteirao INTEGER, numero_imovel TEXT, endereco TEXT, id_atividade INTEGER)",
     "CREATE TABLE grupo_rec(id_grupo_rec INTEGER, codigo TEXT, nome TEXT)",
     "CREATE TABLE tipo_rec(id_tipo_rec INTEGER, id_grupo_rec INTEGER, nome TEXT)",
-    "CREATE TABLE atividade(id_atividade INTEGER, nome TEXT, grupo INTEGER)"
+    "CREATE TABLE atividade(id_atividade INTEGER, nome TEXT, grupo INTEGER)",
+    "CREATE TABLE produto(id_produto INTEGER, codigo TEXT, nome TEXT, tipo_uso INTEGER)",
   ];
   static final tabelas = {
     "municipio",
@@ -32,7 +33,8 @@ class DbHelper {
     "imovel",
     "grupo_rec",
     "tipo_rec",
-    "atividade"
+    "atividade",
+    "produto"
   };
 
   // torna esta classe singleton
@@ -136,7 +138,7 @@ class DbHelper {
   }
 
   _recupera(Database db) async {
-    print(registros);
+    //print(registros);
     final persTabela = ["municipio", "area", "censitario", "quarteirao"];
     for (var element in persTabela) {
       var tab = registros[element];
@@ -146,17 +148,18 @@ class DbHelper {
     }
   }
 
-  Future<List<Map>> qryCombo(String tabela) async {
+  Future<List<Map>> qryCombo(String tabela, filtro) async {
     Database db = await instance.database;
     String sql;
     if (tabela == 'quarteirao') {
-      sql = 'SELECT id_$tabela as id, numero as nome FROM $tabela order by id';
+      sql = 'SELECT id_$tabela as id, numero as nome FROM $tabela';
     } else if (tabela == 'area' || tabela == 'censitario') {
-      sql = 'SELECT id_$tabela as id, codigo as nome FROM $tabela order by id';
+      sql = 'SELECT id_$tabela as id, codigo as nome FROM $tabela';
     } else {
-      sql = 'SELECT id_$tabela as id, nome FROM $tabela order by id';
+      sql = 'SELECT id_$tabela as id, nome FROM $tabela';
     }
-
+    sql += filtro == null ? ' ORDER BY id' : ' WHERE $filtro ORDER BY id';
+    //print(sql);
     return await db.rawQuery(sql);
   }
 }
