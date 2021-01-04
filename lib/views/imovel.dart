@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:sisamob3/components/increment.dart';
 import 'package:sisamob3/components/steper.dart';
 import 'package:sisamob3/models/imovel_vc.dart';
 
@@ -100,94 +99,96 @@ class _ImovelState extends State<Imovel> {
                   ),
                   textAlign: TextAlign.start,
                 ),
-                subtitle: Column(children: <Widget>[
-                  new Row(children: <Widget>[
-                    new Radio(
-                      value: 1,
-                      groupValue: _imovel.id_situacao,
-                      onChanged: _handleRadioSitChange,
+                subtitle: Column(
+                  children: <Widget>[
+                    new Row(children: <Widget>[
+                      new Radio(
+                        value: 1,
+                        groupValue: _imovel.id_situacao,
+                        onChanged: _handleRadioSitChange,
+                      ),
+                      new Text(
+                        'Trabalhada',
+                        style: new TextStyle(fontSize: 12.0),
+                      ),
+                    ]),
+                    Row(
+                      children: [
+                        new Radio(
+                          value: 2,
+                          groupValue: _imovel.id_situacao,
+                          onChanged: _handleRadioSitChange,
+                        ),
+                        new Text(
+                          'Fechada',
+                          style: new TextStyle(
+                            fontSize: 12.0,
+                          ),
+                        ),
+                      ],
                     ),
-                    new Text(
-                      'Trabalhada',
-                      style: new TextStyle(fontSize: 12.0),
+                    Row(
+                      children: [
+                        new Radio(
+                          value: 3,
+                          groupValue: _imovel.id_situacao,
+                          onChanged: _handleRadioSitChange,
+                        ),
+                        new Text(
+                          'Desocupado',
+                          style: new TextStyle(
+                            fontSize: 12.0,
+                          ),
+                        ),
+                      ],
                     ),
-                  ]),
-                  Row(
-                    children: [
-                      new Radio(
-                        value: 2,
-                        groupValue: _imovel.id_situacao,
-                        onChanged: _handleRadioSitChange,
-                      ),
-                      new Text(
-                        'Fechada',
-                        style: new TextStyle(
-                          fontSize: 12.0,
+                    Row(
+                      children: [
+                        new Radio(
+                          value: 4,
+                          groupValue: _imovel.id_situacao,
+                          onChanged: _handleRadioSitChange,
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      new Radio(
-                        value: 3,
-                        groupValue: _imovel.id_situacao,
-                        onChanged: _handleRadioSitChange,
-                      ),
-                      new Text(
-                        'Desocupado',
-                        style: new TextStyle(
-                          fontSize: 12.0,
+                        new Text(
+                          'Temporada',
+                          style: new TextStyle(
+                            fontSize: 12.0,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      new Radio(
-                        value: 4,
-                        groupValue: _imovel.id_situacao,
-                        onChanged: _handleRadioSitChange,
-                      ),
-                      new Text(
-                        'Temporada',
-                        style: new TextStyle(
-                          fontSize: 12.0,
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        new Radio(
+                          value: 5,
+                          groupValue: _imovel.id_situacao,
+                          onChanged: _handleRadioSitChange,
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      new Radio(
-                        value: 5,
-                        groupValue: _imovel.id_situacao,
-                        onChanged: _handleRadioSitChange,
-                      ),
-                      new Text(
-                        'Parcial',
-                        style: new TextStyle(
-                          fontSize: 12.0,
+                        new Text(
+                          'Parcial',
+                          style: new TextStyle(
+                            fontSize: 12.0,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      new Radio(
-                        value: 6,
-                        groupValue: _imovel.id_situacao,
-                        onChanged: _handleRadioSitChange,
-                      ),
-                      new Text(
-                        'Recusa',
-                        style: new TextStyle(
-                          fontSize: 12.0,
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        new Radio(
+                          value: 6,
+                          groupValue: _imovel.id_situacao,
+                          onChanged: _handleRadioSitChange,
                         ),
-                      ),
-                    ],
-                  ),
-                ]),
+                        new Text(
+                          'Recusa',
+                          style: new TextStyle(
+                            fontSize: 12.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               ListTile(
                 title: Row(
