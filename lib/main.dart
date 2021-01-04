@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:sisamob3/util/routes.dart';
 import 'package:sisamob3/views/atividade.dart';
 import 'package:sisamob3/views/com_importa.dart';
+import 'package:sisamob3/views/im_cadastrado.dart';
+import 'package:sisamob3/views/imovel.dart';
 import 'package:sisamob3/views/principal.dart';
+import 'package:sisamob3/views/recipiente.dart';
 import 'package:sisamob3/views/vis_imovel.dart';
 
 void main() {
@@ -14,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'SisaMob 3',
       theme: ThemeData(
         primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -24,6 +27,9 @@ class MyApp extends StatelessWidget {
         Routes.COM_IMPORTA: (_) => ComImporta(),
         Routes.VISITA: (_) => Atividade(),
         Routes.VIS_IMOVEL: (_) => VisImovel(),
+        Routes.IMOVEL: (_) => Imovel(),
+        Routes.IM_CADASTRADO: (_) => ImCadastrado(),
+        Routes.RECIPIENTE: (_) => Recipiente(),
       },
       builder: (BuildContext context, Widget widget) {
         Widget error = Text('Encontramos um erro....');

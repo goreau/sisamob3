@@ -40,7 +40,8 @@ class _FilterState extends State<Atividade> {
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  Dropdown('Municipio', lstMun, mun, update: _setCens),
+                  Dropdown('Municipio', lstMun, int.parse(mun),
+                      update: _setCens),
                 ],
               ),
               RaisedButton(

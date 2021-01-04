@@ -28,9 +28,6 @@ class _DropdownState extends State<Dropdown> {
 
   @override
   Widget build(BuildContext context) {
-    //if (list == null) {
-    //  return CircularProgressIndicator();
-    // }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: DropdownButton<String>(
@@ -41,16 +38,12 @@ class _DropdownState extends State<Dropdown> {
         isExpanded: true,
         items: list,
         onChanged: (String value) {
-          // Fix start.
           setState(() {
             _chosenValue = value;
           });
           if (widget.update != null) {
-            //(widget._key == 'Favourite Animal' && _chosenValue == 'Cat')?
             widget.update(_chosenValue);
-            //   : widget.update(false);
           }
-          // Fix end.
         },
       ),
     );

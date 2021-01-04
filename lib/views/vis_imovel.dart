@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sisamob3/components/dropdown.dart';
+import 'package:sisamob3/models/imovel_vc.dart';
 import 'package:sisamob3/models/visita.dart';
 import 'package:sisamob3/util/auxiliar.dart';
 import 'package:sisamob3/util/routes.dart';
@@ -218,7 +219,7 @@ class _VisImovelState extends State<VisImovel> {
                         onPressed: () {
                           _doRegister();
                         },
-                        child: Text('Prosseguir'),
+                        child: Text('Salvar'),
                         style: ElevatedButton.styleFrom(primary: Colors.blue)),
                   ),
                 ),
@@ -242,9 +243,10 @@ class _VisImovelState extends State<VisImovel> {
       _form.currentState.save();
 
       if ([5, 6.7].contains(vis.id_atividade)) {
+        ImovelVC im = ImovelVC(0, vis.id_visita);
         Navigator.of(context).pushNamed(
-          Routes.VIS_IMOVEL,
-          arguments: vis, //saved,
+          Routes.IMOVEL,
+          arguments: im, //saved,
         );
       }
     }
