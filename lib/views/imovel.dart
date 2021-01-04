@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:sisamob3/components/increment.dart';
 import 'package:sisamob3/components/steper.dart';
 import 'package:sisamob3/models/imovel_vc.dart';
 

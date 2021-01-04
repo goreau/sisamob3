@@ -21,6 +21,14 @@ class CustomStepper extends StatefulWidget {
 }
 
 class _CustomStepperState extends State<CustomStepper> {
+  TextEditingController _incController;
+
+  @override
+  void initState() {
+    super.initState();
+    _incController = TextEditingController(text: widget.value.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -39,13 +47,22 @@ class _CustomStepperState extends State<CustomStepper> {
         ),
         Container(
           width: widget.iconSize,
-          child: Text(
+          child: TextField(
+            controller: _incController,
+            style: TextStyle(
+              fontSize: widget.iconSize * 0.8,
+            ),
+            textAlign: TextAlign.center,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+            ),
+          ), /*Text( 
             '${widget.value}',
             style: TextStyle(
               fontSize: widget.iconSize * 0.8,
             ),
             textAlign: TextAlign.center,
-          ),
+          ),*/
         ),
         RoundedIconButton(
           icon: Icons.add,
