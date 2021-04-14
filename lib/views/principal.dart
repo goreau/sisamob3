@@ -87,7 +87,9 @@ class Principal extends StatelessWidget {
                     'Atualizar Coordenadas',
                     style: TextStyle(fontSize: 12),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pushNamed(Routes.FORMULARIO);
+                  },
                 ),
               ),
               Container(

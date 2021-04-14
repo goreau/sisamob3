@@ -8,6 +8,8 @@ import 'package:sisamob3/views/principal.dart';
 import 'package:sisamob3/views/recipiente.dart';
 import 'package:sisamob3/views/vis_imovel.dart';
 
+import 'views/formulario.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -30,6 +32,7 @@ class MyApp extends StatelessWidget {
         Routes.IMOVEL: (_) => Imovel(),
         Routes.IM_CADASTRADO: (_) => ImCadastrado(),
         Routes.RECIPIENTE: (_) => Recipiente(),
+        Routes.FORMULARIO: (_) => Formulario(),
       },
       builder: (BuildContext context, Widget widget) {
         Widget error = Text('Encontramos um erro....');
